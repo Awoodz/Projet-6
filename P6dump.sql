@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `client`;
 CREATE TABLE `client` (
   `client_user_id` int unsigned NOT NULL,
   `client_contact_id` int unsigned NOT NULL,
-  `client_mail` varchar(45) DEFAULT NULL,
+  `client_mail` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`client_user_id`,`client_contact_id`),
   KEY `fk_client_contact_idx` (`client_contact_id`),
   CONSTRAINT `fk_client_contact` FOREIGN KEY (`client_contact_id`) REFERENCES `contact` (`contact_id`),
@@ -52,10 +52,10 @@ DROP TABLE IF EXISTS `contact`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contact` (
   `contact_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `contact_city` varchar(45) NOT NULL,
-  `contact_adress` varchar(45) NOT NULL,
+  `contact_city` varchar(40) NOT NULL,
+  `contact_adress` varchar(60) NOT NULL,
   `contact_level` varchar(5) DEFAULT NULL,
-  `contact_phone` varchar(15) NOT NULL,
+  `contact_phone` varchar(10) NOT NULL,
   `contact_comment` varchar(150) DEFAULT NULL,
   `contact_nearest_restaurant` int unsigned DEFAULT NULL,
   PRIMARY KEY (`contact_id`),
@@ -83,7 +83,7 @@ DROP TABLE IF EXISTS `ingredient`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ingredient` (
   `ingredient_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `stock_ingredient_name` varchar(45) NOT NULL,
+  `ingredient_name` varchar(40) NOT NULL,
   PRIMARY KEY (`ingredient_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -94,7 +94,7 @@ CREATE TABLE `ingredient` (
 
 LOCK TABLES `ingredient` WRITE;
 /*!40000 ALTER TABLE `ingredient` DISABLE KEYS */;
-INSERT INTO `ingredient` VALUES (1,'jambon'),(2,'tomate'),(3,'lardon'),(4,'creme'),(5,'mozarella'),(6,'p├óte'),(7,'coca-cola');
+INSERT INTO `ingredient` VALUES (1,'jambon'),(2,'tomate'),(3,'lardon'),(4,'creme'),(5,'mozzarella'),(6,'p├óte'),(7,'coca-cola');
 /*!40000 ALTER TABLE `ingredient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -106,14 +106,14 @@ DROP TABLE IF EXISTS `ingredient_stock`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ingredient_stock` (
-  `restaurant_id` int unsigned NOT NULL,
-  `ingredient_id` int unsigned NOT NULL,
-  `ingredient_qtt` float unsigned NOT NULL,
-  PRIMARY KEY (`restaurant_id`,`ingredient_id`),
-  KEY `fk_stock_restaurant_id_idx` (`restaurant_id`),
-  KEY `fk_ingredient_id` (`ingredient_id`),
-  CONSTRAINT `fk_ingredient_id` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredient` (`ingredient_id`),
-  CONSTRAINT `fk_stock_restaurant_id` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`restaurant_id`)
+  `stock_restaurant_id` int unsigned NOT NULL,
+  `stock_ingredient_id` int unsigned NOT NULL,
+  `stock_ingredient_qtt` int unsigned NOT NULL,
+  PRIMARY KEY (`stock_restaurant_id`,`stock_ingredient_id`),
+  KEY `fk_stock_restaurant_id_idx` (`stock_restaurant_id`),
+  KEY `fk_ingredient_id` (`stock_ingredient_id`),
+  CONSTRAINT `fk_ingredient_id` FOREIGN KEY (`stock_ingredient_id`) REFERENCES `ingredient` (`ingredient_id`),
+  CONSTRAINT `fk_stock_restaurant_id` FOREIGN KEY (`stock_restaurant_id`) REFERENCES `restaurant` (`restaurant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -166,7 +166,7 @@ DROP TABLE IF EXISTS `ocpizza_role`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ocpizza_role` (
   `ocpizza_role_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `ocpizza_role_name` varchar(45) NOT NULL,
+  `ocpizza_role_name` varchar(15) NOT NULL,
   PRIMARY KEY (`ocpizza_role_id`),
   UNIQUE KEY `role_id_UNIQUE` (`ocpizza_role_id`),
   UNIQUE KEY `role_name_UNIQUE` (`ocpizza_role_name`)
@@ -252,7 +252,7 @@ CREATE TABLE `order_basket` (
 
 LOCK TABLES `order_basket` WRITE;
 /*!40000 ALTER TABLE `order_basket` DISABLE KEYS */;
-INSERT INTO `order_basket` VALUES (1,1,1,1),(1,2,3,1),(2,3,2,1),(2,2,4,1),(2,1,1,2);
+INSERT INTO `order_basket` VALUES (1,2,2,1),(2,3,1,1),(2,2,3,1),(1,1,1,1),(2,1,1,2);
 /*!40000 ALTER TABLE `order_basket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,7 +265,7 @@ DROP TABLE IF EXISTS `order_delivery`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_delivery` (
   `delivery_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `delivery_name` varchar(45) NOT NULL,
+  `delivery_name` varchar(30) NOT NULL,
   PRIMARY KEY (`delivery_id`),
   UNIQUE KEY `delivery_id_UNIQUE` (`delivery_id`),
   UNIQUE KEY `delivery_name_UNIQUE` (`delivery_name`)
@@ -291,7 +291,7 @@ DROP TABLE IF EXISTS `order_payment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_payment` (
   `payment_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `payment_name` varchar(45) NOT NULL,
+  `payment_name` varchar(25) NOT NULL,
   PRIMARY KEY (`payment_id`),
   UNIQUE KEY `paiment_id_UNIQUE` (`payment_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
@@ -316,7 +316,7 @@ DROP TABLE IF EXISTS `order_status`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_status` (
   `status_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `status_name` varchar(45) NOT NULL,
+  `status_name` varchar(30) NOT NULL,
   PRIMARY KEY (`status_id`),
   UNIQUE KEY `status_id_UNIQUE` (`status_id`),
   UNIQUE KEY `status_name_UNIQUE` (`status_name`)
@@ -343,14 +343,14 @@ DROP TABLE IF EXISTS `order_statusupdate`;
 CREATE TABLE `order_statusupdate` (
   `statusupdate_order_id` int unsigned NOT NULL,
   `statusupdate_status_id` int unsigned NOT NULL,
-  `statusupdate_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status_update_user_id` int unsigned NOT NULL,
+  `statusupdate_time` datetime NOT NULL,
+  `statusupdate_user_id` int unsigned NOT NULL,
   KEY `fk_statusupdate_status_id_idx` (`statusupdate_status_id`),
   KEY `fk_statusupdate_command_id_idx` (`statusupdate_order_id`),
-  KEY `fk_statusupdate_user_id_idx` (`status_update_user_id`),
+  KEY `fk_statusupdate_user_id_idx` (`statusupdate_user_id`),
   CONSTRAINT `fk_statusupdate_order_id` FOREIGN KEY (`statusupdate_order_id`) REFERENCES `order` (`order_id`),
   CONSTRAINT `fk_statusupdate_status_id` FOREIGN KEY (`statusupdate_status_id`) REFERENCES `order_status` (`status_id`),
-  CONSTRAINT `fk_statusupdate_user_id` FOREIGN KEY (`status_update_user_id`) REFERENCES `user` (`user_id`)
+  CONSTRAINT `fk_statusupdate_user_id` FOREIGN KEY (`statusupdate_user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -360,7 +360,7 @@ CREATE TABLE `order_statusupdate` (
 
 LOCK TABLES `order_statusupdate` WRITE;
 /*!40000 ALTER TABLE `order_statusupdate` DISABLE KEYS */;
-INSERT INTO `order_statusupdate` VALUES (1,1,'2020-05-04 15:30:43',1),(1,1,'2020-05-04 15:30:43',1),(1,2,'2020-05-04 15:32:45',1),(2,1,'2020-05-04 15:45:01',3),(2,2,'2020-05-04 15:47:15',3),(2,3,'2020-05-04 15:55:00',3);     
+INSERT INTO `order_statusupdate` VALUES (1,1,'2004-05-20 15:30:43',1),(1,2,'2004-05-20 15:32:45',1),(2,1,'2004-05-20 15:45:01',3),(2,2,'2004-05-20 15:47:15',3),(2,3,'2004-05-20 15:55:00',3);
 /*!40000 ALTER TABLE `order_statusupdate` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -373,15 +373,15 @@ DROP TABLE IF EXISTS `product`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
   `product_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `product_name` varchar(45) NOT NULL,
-  `product_type_id` int unsigned NOT NULL,
+  `product_name` varchar(40) NOT NULL,
+  `product_product_type_id` int unsigned NOT NULL,
   `product_img_path` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`product_id`),
   UNIQUE KEY `Pizza_name_UNIQUE` (`product_name`),
   UNIQUE KEY `Pizza_id_UNIQUE` (`product_id`),
   UNIQUE KEY `pizza_img_path_UNIQUE` (`product_img_path`),
-  KEY `fk_product_class_idx` (`product_type_id`),
-  CONSTRAINT `fk_product_type` FOREIGN KEY (`product_type_id`) REFERENCES `product_type` (`product_type_id`)
+  KEY `fk_product_class_idx` (`product_product_type_id`),
+  CONSTRAINT `fk_product_type` FOREIGN KEY (`product_product_type_id`) REFERENCES `product_type` (`product_type_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -420,7 +420,7 @@ CREATE TABLE `product_price` (
 
 LOCK TABLES `product_price` WRITE;
 /*!40000 ALTER TABLE `product_price` DISABLE KEYS */;
-INSERT INTO `product_price` VALUES (1,1,2.5),(2,2,8),(2,3,10),(2,4,13),(3,2,8),(3,3,10),(3,4,13);
+INSERT INTO `product_price` VALUES (2,2,8),(2,3,10),(2,4,13),(3,2,9),(3,3,12),(3,4,15),(4,1,2.5);
 /*!40000 ALTER TABLE `product_price` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -432,12 +432,12 @@ DROP TABLE IF EXISTS `product_recipe`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_recipe` (
-  `product_id` int unsigned NOT NULL,
-  `stock_ingredient_id` int unsigned NOT NULL,
-  PRIMARY KEY (`product_id`,`stock_ingredient_id`),
-  KEY `fk_ingredient_id_idx` (`stock_ingredient_id`),
-  CONSTRAINT `fk_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
-  CONSTRAINT `fk_stock_ingredient_id` FOREIGN KEY (`stock_ingredient_id`) REFERENCES `ingredient` (`ingredient_id`)
+  `recipe_product_id` int unsigned NOT NULL,
+  `recipe_ingredient_id` int unsigned NOT NULL,
+  PRIMARY KEY (`recipe_product_id`,`recipe_ingredient_id`),
+  KEY `fk_ingredient_id_idx` (`recipe_ingredient_id`),
+  CONSTRAINT `fk_product_id` FOREIGN KEY (`recipe_product_id`) REFERENCES `product` (`product_id`),
+  CONSTRAINT `fk_stock_ingredient_id` FOREIGN KEY (`recipe_ingredient_id`) REFERENCES `ingredient` (`ingredient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -460,7 +460,7 @@ DROP TABLE IF EXISTS `product_size`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_size` (
   `product_size_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `product_size_name` varchar(45) NOT NULL,
+  `product_size_name` varchar(10) NOT NULL,
   PRIMARY KEY (`product_size_id`),
   UNIQUE KEY `size_id_UNIQUE` (`product_size_id`),
   UNIQUE KEY `size_name_UNIQUE` (`product_size_name`)
@@ -486,7 +486,7 @@ DROP TABLE IF EXISTS `product_type`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_type` (
   `product_type_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `product_type_name` varchar(45) NOT NULL,
+  `product_type_name` varchar(40) NOT NULL,
   `product_type_is_sizeable` tinyint unsigned NOT NULL,
   PRIMARY KEY (`product_type_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
@@ -511,7 +511,7 @@ DROP TABLE IF EXISTS `restaurant`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `restaurant` (
   `restaurant_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `restaurant_name` varchar(45) NOT NULL,
+  `restaurant_name` varchar(40) NOT NULL,
   `restaurant_contact_id` int unsigned NOT NULL,
   PRIMARY KEY (`restaurant_id`),
   UNIQUE KEY `restaurant_id_UNIQUE` (`restaurant_id`),
@@ -539,10 +539,10 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `user_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `user_first_name` varchar(45) NOT NULL,
-  `user_last_name` varchar(45) NOT NULL,
-  `user_login` varchar(80) NOT NULL,
-  `user_password` varchar(30) NOT NULL,
+  `user_first_name` varchar(40) NOT NULL,
+  `user_last_name` varchar(40) NOT NULL,
+  `user_login` varchar(40) NOT NULL,
+  `user_password` varchar(20) NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   UNIQUE KEY `user_login_UNIQUE` (`user_login`)
@@ -568,4 +568,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-13 14:28:32
+-- Dump completed on 2020-05-14 12:33:40
