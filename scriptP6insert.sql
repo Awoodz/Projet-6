@@ -7,11 +7,11 @@ INSERT INTO `P6`.`Order_delivery` (`delivery_id`, `delivery_name`) VALUES (1, 'L
 INSERT INTO `P6`.`Order_delivery` (`delivery_id`, `delivery_name`) VALUES (2, 'Récupération au restaurant');
 
 -- -----------------------------------------------------
--- Data for table `P6`.`Order_payment`
+-- Data for table `P6`.`Order_payment_type`
 -- -----------------------------------------------------
-INSERT INTO `P6`.`Order_payment` (`payment_id`, `payment_name`) VALUES (1, 'Paiement en ligne');
-INSERT INTO `P6`.`Order_payment` (`payment_id`, `payment_name`) VALUES (2, 'Paiement à la livraison');
-INSERT INTO `P6`.`Order_payment` (`payment_id`, `payment_name`) VALUES (3, 'Paiement sur place');
+INSERT INTO `P6`.`Order_payment_type` (`payment_type_id`, `payment_type_name`) VALUES (1, 'Paiement en ligne');
+INSERT INTO `P6`.`Order_payment_type` (`payment_type_id`, `payment_type_name`) VALUES (2, 'Paiement sur place');
+INSERT INTO `P6`.`Order_payment_type` (`payment_type_id`, `payment_type_name`) VALUES (3, 'Paiement à la livraison');
 
 -- -----------------------------------------------------
 -- Data for table `P6`.`Order_Status`
@@ -37,10 +37,10 @@ INSERT INTO `P6`.`Ingredient` (`ingredient_id`, `ingredient_name`) VALUES (6, 'p
 INSERT INTO `P6`.`Ingredient` (`ingredient_id`, `ingredient_name`) VALUES (7, 'coca-cola');
 
 -- -----------------------------------------------------
--- Data for table `P6`.`OCPizza_role`
+-- Data for table `P6`.`Staff_role`
 -- -----------------------------------------------------
-INSERT INTO `P6`.`OCPizza_role` (`ocpizza_role_id`, `ocpizza_role_name`) VALUES (1, 'Employé');
-INSERT INTO `P6`.`OCPizza_role` (`ocpizza_role_id`, `ocpizza_role_name`) VALUES (2, 'Livreur');
+INSERT INTO `P6`.`Staff_role` (`role_id`, `role_name`) VALUES (1, 'Employé');
+INSERT INTO `P6`.`Staff_role` (`role_id`, `role_name`) VALUES (2, 'Livreur');
 
 -- -----------------------------------------------------
 -- Data for table `P6`.`Product_size`
@@ -61,12 +61,12 @@ INSERT INTO `P6`.`Product_type` (`product_type_id`, `product_type_name`, `produc
 -- -----------------------------------------------------
 -- Data for table `P6`.`User`
 -- -----------------------------------------------------
-INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (1, 'jean', 'python', 'jeanpizza', 'jeanpythonparis');
-INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (2, 'sarah', 'java', 'sarahlivreuse', 'sarajavaparis');
-INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (3, 'pierre', 'céplus', 'pierrepizza', 'pierrecépluslyon');
-INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (4, 'ronald', 'péhachpé', 'ronaldlivreur', 'ronaldpéhachpélyon');
-INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (5, 'amaury', 'bois', 'abois', 'projet6');
-INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (6, 'john', 'doe', 'jdoe69', 'pizzalyon');
+INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (1, 'jean', 'python', 'jeanpizza', '$2y$10$3rDEgfxJ/ks0Uwq8RfW5muYBE0OQzjEMBwsSynIho0kIGopyhEA3S');
+INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (2, 'sarah', 'java', 'sarahlivreuse', '$2y$10$z8VGfSU6QgLoW9e0OuXXgeqzT2ukNMq7mWGqpH3KMcWclPrSattIq');
+INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (3, 'pierre', 'céplus', 'pierrepizza', '$2y$10$3UoMY4OY7kRyXJVSj9P39uRWY5g7HJ27zlim0zDaZF1z6OM05Ai5e');
+INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (4, 'ronald', 'péhachpé', 'ronaldlivreur', '$2y$10$bqo1kRgTerp9NfL5rHIK5u2rjy0qh7JTHg1YoYN9ApxN/OjcZdm5m');
+INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (5, 'amaury', 'bois', 'abois', '$2y$10$r9ob.iL0bnGKrn.7hh/jeOmGLoUL8sHwXEoojfXl9nSqvvDT16Y2a');
+INSERT INTO `P6`.`User` (`user_id`, `user_first_name`, `user_last_name`, `user_login`, `user_password`) VALUES (6, 'john', 'doe', 'jdoe69', '$2y$10$/R2cgjCnsFFO/6XqTDzPouR9zXfSS6Jvku53UtgtlsO4Bzf.3KjBm');
 
 -- -----------------------------------------------------
 -- Data for table `P6`.`Contact`
@@ -93,12 +93,12 @@ INSERT INTO `P6`.`Client` (`client_user_id`, `client_contact_id`, `client_mail`)
 INSERT INTO `P6`.`Client` (`client_user_id`, `client_contact_id`, `client_mail`) VALUES (6, 4, 'j.doe@gmail.com');
 
 -- -----------------------------------------------------
--- Data for table `P6`.`OCPizza`
+-- Data for table `P6`.`Staff`
 -- -----------------------------------------------------
-INSERT INTO `P6`.`OCPizza` (`ocpizza_user_id`, `ocpizza_restaurant_id`, `ocpizza_role_id`) VALUES (1, 1, 1);
-INSERT INTO `P6`.`OCPizza` (`ocpizza_user_id`, `ocpizza_restaurant_id`, `ocpizza_role_id`) VALUES (2, 1, 2);
-INSERT INTO `P6`.`OCPizza` (`ocpizza_user_id`, `ocpizza_restaurant_id`, `ocpizza_role_id`) VALUES (3, 2, 1);
-INSERT INTO `P6`.`OCPizza` (`ocpizza_user_id`, `ocpizza_restaurant_id`, `ocpizza_role_id`) VALUES (4, 2, 2);
+INSERT INTO `P6`.`Staff` (`staff_user_id`, `staff_restaurant_id`, `staff_role_id`) VALUES (1, 1, 1);
+INSERT INTO `P6`.`Staff` (`staff_user_id`, `staff_restaurant_id`, `staff_role_id`) VALUES (2, 1, 2);
+INSERT INTO `P6`.`Staff` (`staff_user_id`, `staff_restaurant_id`, `staff_role_id`) VALUES (3, 2, 1);
+INSERT INTO `P6`.`Staff` (`staff_user_id`, `staff_restaurant_id`, `staff_role_id`) VALUES (4, 2, 2);
 
 -- -----------------------------------------------------
 -- Data for table `P6`.`Ingredient_stock`
@@ -150,10 +150,16 @@ INSERT INTO `P6`.`Product_price` (`Product_price_type`, `Product_price_size_id`,
 INSERT INTO `P6`.`Product_price` (`Product_price_type`, `Product_price_size_id`, `Product_price_real`) VALUES (3, 4, 15);
 
 -- -----------------------------------------------------
+-- Data for table `P6`.`Order_payment`
+-- -----------------------------------------------------
+INSERT INTO `P6`.`Order_payment` (`payment_id`, `payment_payment_type_id`, `payment_token`, `payment_time`, `payment_error`) VALUES (1, 1, '94a08da1fecbb6e8', '04/05/20 15:30:00', NULL);
+INSERT INTO `P6`.`Order_payment` (`payment_id`, `payment_payment_type_id`, `payment_token`, `payment_time`, `payment_error`) VALUES (2, 2, NULL, NULL, NULL);
+
+-- -----------------------------------------------------
 -- Data for table `P6`.`Order`
 -- -----------------------------------------------------
-INSERT INTO `P6`.`Order` (`order_id`, `order_user_id`, `order_status_id`, `order_delivery_id`, `order_payment_id`, `order_restaurant_id`, `order_delivery_adress`) VALUES (1, 5, 2, 1, 1, 1, 3);
-INSERT INTO `P6`.`Order` (`order_id`, `order_user_id`, `order_status_id`, `order_delivery_id`, `order_payment_id`, `order_restaurant_id`, `order_delivery_adress`) VALUES (2, 6, 3, 2, 3, 2, NULL);
+INSERT INTO `P6`.`Order` (`order_id`, `order_user_id`, `order_status_id`, `order_delivery_id`, `order_payment_id`, `order_restaurant_id`, `order_delivery_adress`, `order_cost`) VALUES (1, 5, 2, 1, 1, 1, 3, 12.5);
+INSERT INTO `P6`.`Order` (`order_id`, `order_user_id`, `order_status_id`, `order_delivery_id`, `order_payment_id`, `order_restaurant_id`, `order_delivery_adress`, `order_cost`) VALUES (2, 6, 3, 2, 2, 2, NULL, 27);
 
 -- -----------------------------------------------------
 -- Data for table `P6`.`Order_basket`

@@ -128,62 +128,6 @@ INSERT INTO `ingredient_stock` VALUES (1,1,10),(1,2,10),(1,3,10),(1,4,10),(1,5,1
 UNLOCK TABLES;
 
 --
--- Table structure for table `ocpizza`
---
-
-DROP TABLE IF EXISTS `ocpizza`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ocpizza` (
-  `ocpizza_user_id` int unsigned NOT NULL,
-  `ocpizza_restaurant_id` int unsigned NOT NULL,
-  `ocpizza_role_id` int unsigned NOT NULL,
-  PRIMARY KEY (`ocpizza_user_id`),
-  KEY `fk_ocpizza_role_idx` (`ocpizza_role_id`),
-  KEY `fk_ocpizza_restaurant_idx` (`ocpizza_restaurant_id`),
-  CONSTRAINT `fk_ocpizza_restaurant` FOREIGN KEY (`ocpizza_restaurant_id`) REFERENCES `restaurant` (`restaurant_id`),
-  CONSTRAINT `fk_ocpizza_role` FOREIGN KEY (`ocpizza_role_id`) REFERENCES `ocpizza_role` (`ocpizza_role_id`),
-  CONSTRAINT `fk_ocpizza_user` FOREIGN KEY (`ocpizza_user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `ocpizza`
---
-
-LOCK TABLES `ocpizza` WRITE;
-/*!40000 ALTER TABLE `ocpizza` DISABLE KEYS */;
-INSERT INTO `ocpizza` VALUES (1,1,1),(2,1,2),(3,2,1),(4,2,2);
-/*!40000 ALTER TABLE `ocpizza` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `ocpizza_role`
---
-
-DROP TABLE IF EXISTS `ocpizza_role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ocpizza_role` (
-  `ocpizza_role_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `ocpizza_role_name` varchar(15) NOT NULL,
-  PRIMARY KEY (`ocpizza_role_id`),
-  UNIQUE KEY `role_id_UNIQUE` (`ocpizza_role_id`),
-  UNIQUE KEY `role_name_UNIQUE` (`ocpizza_role_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `ocpizza_role`
---
-
-LOCK TABLES `ocpizza_role` WRITE;
-/*!40000 ALTER TABLE `ocpizza_role` DISABLE KEYS */;
-INSERT INTO `ocpizza_role` VALUES (1,'Employ├®'),(2,'Livreur');
-/*!40000 ALTER TABLE `ocpizza_role` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `order`
 --
 
@@ -198,6 +142,7 @@ CREATE TABLE `order` (
   `order_payment_id` int unsigned NOT NULL,
   `order_restaurant_id` int unsigned NOT NULL,
   `order_delivery_adress` int unsigned DEFAULT NULL,
+  `order_cost` decimal(10,0) unsigned NOT NULL,
   PRIMARY KEY (`order_id`),
   UNIQUE KEY `command_id_UNIQUE` (`order_id`),
   KEY `fk_command_user_id_idx` (`order_user_id`),
@@ -221,7 +166,7 @@ CREATE TABLE `order` (
 
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
-INSERT INTO `order` VALUES (1,5,2,1,1,1,3),(2,6,3,2,3,2,NULL);
+INSERT INTO `order` VALUES (1,5,2,1,1,1,3,13),(2,6,3,2,2,2,NULL,27);
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -252,7 +197,7 @@ CREATE TABLE `order_basket` (
 
 LOCK TABLES `order_basket` WRITE;
 /*!40000 ALTER TABLE `order_basket` DISABLE KEYS */;
-INSERT INTO `order_basket` VALUES (1,2,2,1),(2,3,1,1),(2,2,3,1),(1,1,1,1),(2,1,1,2);
+INSERT INTO `order_basket` VALUES (1,1,1,1),(1,2,3,1),(2,3,2,1),(2,2,4,1),(2,1,1,2);
 /*!40000 ALTER TABLE `order_basket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,10 +236,15 @@ DROP TABLE IF EXISTS `order_payment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_payment` (
   `payment_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `payment_name` varchar(25) NOT NULL,
+  `payment_payment_type_id` int unsigned NOT NULL,
+  `payment_token` varchar(16) DEFAULT NULL,
+  `payment_time` datetime DEFAULT NULL,
+  `payment_error` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`payment_id`),
-  UNIQUE KEY `paiment_id_UNIQUE` (`payment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `paiment_id_UNIQUE` (`payment_id`),
+  KEY `fk_order_payment_type_idx` (`payment_payment_type_id`),
+  CONSTRAINT `fk_order_payment_type` FOREIGN KEY (`payment_payment_type_id`) REFERENCES `order_payment_type` (`payment_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -303,8 +253,33 @@ CREATE TABLE `order_payment` (
 
 LOCK TABLES `order_payment` WRITE;
 /*!40000 ALTER TABLE `order_payment` DISABLE KEYS */;
-INSERT INTO `order_payment` VALUES (1,'Paiement en ligne'),(2,'Paiement ├á la livraison'),(3,'Paiement sur place');
+INSERT INTO `order_payment` VALUES (1,1,'94a08da1fecbb6e8','2004-05-20 15:30:00',NULL),(2,2,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `order_payment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_payment_type`
+--
+
+DROP TABLE IF EXISTS `order_payment_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_payment_type` (
+  `payment_type_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `payment_type_name` varchar(30) NOT NULL,
+  PRIMARY KEY (`payment_type_id`),
+  UNIQUE KEY `payment_type_id_UNIQUE` (`payment_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_payment_type`
+--
+
+LOCK TABLES `order_payment_type` WRITE;
+/*!40000 ALTER TABLE `order_payment_type` DISABLE KEYS */;
+INSERT INTO `order_payment_type` VALUES (1,'Paiement en ligne'),(2,'Paiement sur place'),(3,'Paiement ├á la livraison');
+/*!40000 ALTER TABLE `order_payment_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -405,7 +380,7 @@ DROP TABLE IF EXISTS `product_price`;
 CREATE TABLE `product_price` (
   `Product_price_type` int unsigned NOT NULL,
   `Product_price_size_id` int unsigned NOT NULL,
-  `Product_price_real` float unsigned NOT NULL,
+  `Product_price_real` decimal(10,0) unsigned NOT NULL,
   PRIMARY KEY (`Product_price_type`,`Product_price_size_id`),
   KEY `fk_price_size_id_idx` (`Product_price_size_id`),
   KEY `fk_product_price_product_idx` (`Product_price_type`),
@@ -420,7 +395,7 @@ CREATE TABLE `product_price` (
 
 LOCK TABLES `product_price` WRITE;
 /*!40000 ALTER TABLE `product_price` DISABLE KEYS */;
-INSERT INTO `product_price` VALUES (2,2,8),(2,3,10),(2,4,13),(3,2,9),(3,3,12),(3,4,15),(4,1,2.5);
+INSERT INTO `product_price` VALUES (2,2,8),(2,3,10),(2,4,13),(3,2,9),(3,3,12),(3,4,15),(4,1,3);
 /*!40000 ALTER TABLE `product_price` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -531,6 +506,62 @@ INSERT INTO `restaurant` VALUES (1,'OCPizza Paris',1),(2,'OCPizza Lyon',2);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `staff`
+--
+
+DROP TABLE IF EXISTS `staff`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `staff` (
+  `staff_user_id` int unsigned NOT NULL,
+  `staff_restaurant_id` int unsigned NOT NULL,
+  `staff_role_id` int unsigned NOT NULL,
+  PRIMARY KEY (`staff_user_id`),
+  KEY `fk_ocpizza_role_idx` (`staff_role_id`),
+  KEY `fk_ocpizza_restaurant_idx` (`staff_restaurant_id`),
+  CONSTRAINT `fk_staff_restaurant` FOREIGN KEY (`staff_restaurant_id`) REFERENCES `restaurant` (`restaurant_id`),
+  CONSTRAINT `fk_staff_role` FOREIGN KEY (`staff_role_id`) REFERENCES `staff_role` (`role_id`),
+  CONSTRAINT `fk_staff_user` FOREIGN KEY (`staff_user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `staff`
+--
+
+LOCK TABLES `staff` WRITE;
+/*!40000 ALTER TABLE `staff` DISABLE KEYS */;
+INSERT INTO `staff` VALUES (1,1,1),(2,1,2),(3,2,1),(4,2,2);
+/*!40000 ALTER TABLE `staff` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `staff_role`
+--
+
+DROP TABLE IF EXISTS `staff_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `staff_role` (
+  `role_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(15) NOT NULL,
+  PRIMARY KEY (`role_id`),
+  UNIQUE KEY `role_id_UNIQUE` (`role_id`),
+  UNIQUE KEY `role_name_UNIQUE` (`role_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `staff_role`
+--
+
+LOCK TABLES `staff_role` WRITE;
+/*!40000 ALTER TABLE `staff_role` DISABLE KEYS */;
+INSERT INTO `staff_role` VALUES (1,'Employ├®'),(2,'Livreur');
+/*!40000 ALTER TABLE `staff_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -542,7 +573,7 @@ CREATE TABLE `user` (
   `user_first_name` varchar(40) NOT NULL,
   `user_last_name` varchar(40) NOT NULL,
   `user_login` varchar(40) NOT NULL,
-  `user_password` varchar(20) NOT NULL,
+  `user_password` varchar(60) NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   UNIQUE KEY `user_login_UNIQUE` (`user_login`)
@@ -555,7 +586,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'jean','python','jeanpizza','jeanpythonparis'),(2,'sarah','java','sarahlivreuse','sarajavaparis'),(3,'pierre','c├®plus','pierrepizza','pierrec├®pluslyon'),(4,'ronald','p├®hachp├®','ronaldlivreur','ronaldp├®hachp├®lyon'),(5,'amaury','bois','abois','projet6'),(6,'john','doe','jdoe69','pizzalyon');
+INSERT INTO `user` VALUES (1,'jean','python','jeanpizza','$2y$10$3rDEgfxJ/ks0Uwq8RfW5muYBE0OQzjEMBwsSynIho0kIGopyhEA3S'),(2,'sarah','java','sarahlivreuse','$2y$10$z8VGfSU6QgLoW9e0OuXXgeqzT2ukNMq7mWGqpH3KMcWclPrSattIq'),(3,'pierre','c├®plus','pierrepizza','$2y$10$3UoMY4OY7kRyXJVSj9P39uRWY5g7HJ27zlim0zDaZF1z6OM05Ai5e'),(4,'ronald','p├®hachp├®','ronaldlivreur','$2y$10$bqo1kRgTerp9NfL5rHIK5u2rjy0qh7JTHg1YoYN9ApxN/OjcZdm5m'),(5,'amaury','bois','abois','$2y$10$r9ob.iL0bnGKrn.7hh/jeOmGLoUL8sHwXEoojfXl9nSqvvDT16Y2a'),(6,'john','doe','jdoe69','$2y$10$/R2cgjCnsFFO/6XqTDzPouR9zXfSS6Jvku53UtgtlsO4Bzf.3KjBm');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -568,4 +599,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-14 12:33:40
+-- Dump completed on 2020-05-15 13:19:40
